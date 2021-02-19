@@ -4,25 +4,14 @@ use std::cmp;
 use std::collections::HashSet;
 
 fn seat_id_by_boarding_pass(boarding_pass: &str) -> i32 {
-    let rows_str = &boarding_pass[..7];
-    let cols_str = &boarding_pass[7..];
-    let mut rows = 1 << 7; // 128
-    let mut cols = 1 << 3; // 8
-    let mut row = 0;
-    let mut col = 0;
-    for c in rows_str.chars() {
-        rows >>= 1;
-        if c == 'B' {
-            row += rows
+    let mut out = 0;
+    for c in boarding_pass.chars() {
+        out <<= 1;
+        if c == 'B' || c == 'R' {
+            out += 1;
         }
     }
-    for c in cols_str.chars() {
-        cols >>= 1;
-        if c == 'R' {
-            col += cols
-        }
-    }
-    row * 8 + col
+    out
 }
 
 fn part1() {
