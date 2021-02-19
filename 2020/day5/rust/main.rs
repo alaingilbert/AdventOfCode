@@ -8,7 +8,7 @@ fn seat_id_by_boarding_pass(boarding_pass: &str) -> i32 {
     for c in boarding_pass.chars() {
         out <<= 1;
         if c == 'B' || c == 'R' {
-            out += 1;
+            out |= 1;
         }
     }
     out
