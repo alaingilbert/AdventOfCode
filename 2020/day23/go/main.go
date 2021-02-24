@@ -17,11 +17,12 @@ func char2Int(c byte) int {
 }
 
 func createList(input string) *Node {
-	head := &Node{Val: char2Int(input[0])}
+	first, rest := input[0], input[1:]
+	head := &Node{Val: char2Int(first)}
 	curr := head
 	var newNode *Node
-	for i := range input[1:] {
-		newNode = &Node{Val: char2Int(input[1:][i])}
+	for i := range rest {
+		newNode = &Node{Val: char2Int(rest[i])}
 		curr.Next = newNode
 		curr = newNode
 	}
