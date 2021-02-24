@@ -70,24 +70,6 @@ func removeThree(currNode *Node) (removed *Node) {
 	return
 }
 
-func findDestination(currNode, removed *Node) (dest *Node) {
-	newVal := currNode.Val
-	for {
-		newVal--
-		if newVal == 0 {
-			newVal = 9
-		}
-		if !isRemoved(removed, newVal) {
-			break
-		}
-	}
-	dest = currNode
-	for dest.Val != newVal {
-		dest = dest.Next
-	}
-	return
-}
-
 func findDestinationUsingCache(currNode, removed *Node, cache map[int]*Node) (dest *Node) {
 	newVal := currNode.Val
 	for {
