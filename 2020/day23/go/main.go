@@ -115,26 +115,26 @@ func mixCups(currNode *Node, nbMoves int, cache map[int]*Node) {
 
 func part1() {
 	input := "853192647"
-	currNode := createList(input)
-	cache := buildCache(currNode)
+	llist := createList(input)
+	cache := buildCache(llist)
 	nbMoves := 100
-	mixCups(currNode, nbMoves, cache)
+	mixCups(llist, nbMoves, cache)
 	// Find node with label 1
-	currNode = cache[1]
-	printList(currNode)
+	nodeLabelOne := cache[1]
+	printList(nodeLabelOne)
 }
 
 func part2() {
 	input := "853192647"
-	currNode := createList(input)
-	extendList(currNode) // extend the list to 1M
-	cache := buildCache(currNode)
+	llist := createList(input)
+	extendList(llist) // extend the list to 1M
+	cache := buildCache(llist)
 	nbMoves := 10_000_000
-	mixCups(currNode, nbMoves, cache)
+	mixCups(llist, nbMoves, cache)
 	// Find node with label 1
-	currNode = cache[1]
+	nodeLabelOne := cache[1]
 	// Multiply next two nodes
-	fmt.Println(currNode.Next.Val * currNode.Next.Next.Val)
+	fmt.Println(nodeLabelOne.Next.Val * nodeLabelOne.Next.Next.Val)
 }
 
 func main() {
