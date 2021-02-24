@@ -147,7 +147,7 @@ func part2() {
 	currNode := createList(input)
 	extendList(currNode) // extend the list to 1M
 	cache := buildCache(currNode)
-	nbMoves := 10000000
+	nbMoves := 10_000_000
 	mixCups(currNode, nbMoves, cache)
 	// Find node with label 1
 	currNode = cache[1]
