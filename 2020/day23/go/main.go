@@ -11,19 +11,33 @@ type Node struct {
 	Val  int
 }
 
+func char2Int(c byte) int {
+	v, _ := strconv.Atoi(string(c))
+	return v
+}
+
 func createList(input string) *Node {
-	v, _ := strconv.Atoi(string(input[0]))
-	head := &Node{Val: v}
-	prev := head
+	head := &Node{Val: char2Int(input[0])}
+	curr := head
 	var newNode *Node
-	for _, c := range input[1:] {
-		v, _ := strconv.Atoi(string(c))
-		newNode = &Node{Val: v}
-		prev.Next = newNode
-		prev = newNode
+	for i := range input[1:] {
+		newNode = &Node{Val: char2Int(input[1:][i])}
+		curr.Next = newNode
+		curr = newNode
 	}
 	newNode.Next = head
 	return head
+}
+
+func extendList(head *Node) {
+	newList := &Node{Val: 10}
+	newHead := newList
+	for i := 11; i <= 1000000; i++ {
+		newList.Next = &Node{Val: i}
+		newList = newList.Next
+	}
+	head.Next.Next.Next.Next.Next.Next.Next.Next.Next = newHead
+	newList.Next = head
 }
 
 func printList(n *Node) {
@@ -126,14 +140,7 @@ func buildCache(head *Node) map[int]*Node {
 func part2() {
 	input := "853192647"
 	head := createList(input)
-	newList := &Node{Val: 10}
-	newHead := newList
-	for i := 11; i <= 1000000; i++ {
-		newList.Next = &Node{Val: i}
-		newList = newList.Next
-	}
-	head.Next.Next.Next.Next.Next.Next.Next.Next.Next = newHead
-	newList.Next = head
+	extendList(head) // extend the list to 1M
 
 	cache := buildCache(head)
 
