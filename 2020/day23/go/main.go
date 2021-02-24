@@ -114,8 +114,7 @@ func mixCups(currNode *Node, nbMoves int, cache map[int]*Node) {
 }
 
 func part1() {
-	input := "853192647"
-	llist := createList(input)
+	llist := createList(puzzleInput)
 	cache := buildCache(llist)
 	nbMoves := 100
 	mixCups(llist, nbMoves, cache)
@@ -125,8 +124,7 @@ func part1() {
 }
 
 func part2() {
-	input := "853192647"
-	llist := createList(input)
+	llist := createList(puzzleInput)
 	extendList(llist) // extend the list to 1M
 	cache := buildCache(llist)
 	nbMoves := 10_000_000
@@ -136,6 +134,8 @@ func part2() {
 	// Multiply next two nodes
 	fmt.Println(nodeLabelOne.Next.Val * nodeLabelOne.Next.Next.Val)
 }
+
+var puzzleInput = "853192647"
 
 func main() {
 	part1()
