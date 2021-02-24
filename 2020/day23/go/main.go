@@ -74,13 +74,28 @@ func findDestination(currNode, removed *Node) (dest *Node) {
 	return
 }
 
+func findDestination2(currNode, removed *Node, cache map[int]*Node) (dest *Node) {
+	newVal := currNode.Val
+	for {
+		newVal--
+		if newVal == 0 {
+			newVal = 1000000
+		}
+		if !isRemoved(removed, newVal) {
+			break
+		}
+	}
+	dest = cache[newVal]
+	return
+}
+
 func addRemoved(dest, removed *Node) {
 	tmp := dest.Next
 	dest.Next = removed
 	removed.Next.Next.Next = tmp
 }
 
-func part1() *Node {
+func part1() {
 	input := "853192647"
 	currNode := createList(input)
 	for i := 0; i < 100; i++ {
@@ -93,20 +108,49 @@ func part1() *Node {
 		currNode = currNode.Next
 	}
 	printList(currNode)
-	return currNode
 }
 
-func part2(currNode *Node) {
+func buildCache(head *Node) map[int]*Node {
+	out := make(map[int]*Node)
+	tmp := head
+	for {
+		out[tmp.Val] = tmp
+		tmp = tmp.Next
+		if tmp == head {
+			break
+		}
+	}
+	return out
+}
+
+func part2() {
+	input := "853192647"
+	head := createList(input)
 	newList := &Node{Val: 10}
-	head := newList
-	for i := 11; i <= 100; i++ {
+	newHead := newList
+	for i := 11; i <= 1000000; i++ {
 		newList.Next = &Node{Val: i}
 		newList = newList.Next
 	}
-	printList(head)
+	head.Next.Next.Next.Next.Next.Next.Next.Next.Next = newHead
+	newList.Next = head
+
+	cache := buildCache(head)
+
+	currNode := head
+	for i := 0; i < 10000000; i++ {
+		removed := removeThree(currNode)
+		destNode := findDestination2(currNode, removed, cache)
+		addRemoved(destNode, removed)
+		currNode = currNode.Next
+	}
+	for currNode.Val != 1 {
+		currNode = currNode.Next
+	}
+	fmt.Println(currNode.Next.Val * currNode.Next.Next.Val)
 }
 
 func main() {
-	currNode := part1()
-	part2(currNode)
+	part1()
+	part2()
 }
