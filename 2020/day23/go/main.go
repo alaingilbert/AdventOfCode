@@ -32,7 +32,7 @@ func createList(input string) *Node {
 func extendList(head *Node) {
 	newList := &Node{Val: 10}
 	newHead := newList
-	for i := 11; i <= 1000000; i++ {
+	for i := 11; i <= 1_000_000; i++ {
 		newList.Next = &Node{Val: i}
 		newList = newList.Next
 	}
