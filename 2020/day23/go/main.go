@@ -74,7 +74,7 @@ func findDestination(currNode, removed *Node) (dest *Node) {
 	return
 }
 
-func findDestination2(currNode, removed *Node, cache map[int]*Node) (dest *Node) {
+func findDestinationUsingCache(currNode, removed *Node, cache map[int]*Node) (dest *Node) {
 	newVal := currNode.Val
 	for {
 		newVal--
@@ -140,13 +140,15 @@ func part2() {
 	currNode := head
 	for i := 0; i < 10000000; i++ {
 		removed := removeThree(currNode)
-		destNode := findDestination2(currNode, removed, cache)
+		destNode := findDestinationUsingCache(currNode, removed, cache)
 		addRemoved(destNode, removed)
 		currNode = currNode.Next
 	}
+	// Find node with label 1
 	for currNode.Val != 1 {
 		currNode = currNode.Next
 	}
+	// Multiply next two nodes
 	fmt.Println(currNode.Next.Val * currNode.Next.Next.Val)
 }
 
