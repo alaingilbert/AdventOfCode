@@ -52,6 +52,19 @@ func printList(n *Node) {
 	fmt.Println()
 }
 
+func removeThree(currNode *Node) (removed *Node) {
+	removed = currNode.Next
+	currNode.Next = currNode.Next.Next.Next.Next
+	removed.Next.Next.Next = nil
+	return
+}
+
+func addRemoved(dest, removed *Node) {
+	tmp := dest.Next
+	dest.Next = removed
+	removed.Next.Next.Next = tmp
+}
+
 func isRemoved(n *Node, v int) (isRemoved bool) {
 	tmp := n
 	for tmp != nil {
@@ -60,13 +73,6 @@ func isRemoved(n *Node, v int) (isRemoved bool) {
 		}
 		tmp = tmp.Next
 	}
-	return
-}
-
-func removeThree(currNode *Node) (removed *Node) {
-	removed = currNode.Next
-	currNode.Next = currNode.Next.Next.Next.Next
-	removed.Next.Next.Next = nil
 	return
 }
 
@@ -83,12 +89,6 @@ func findDestinationUsingCache(currNode, removed *Node, cache map[int]*Node) (de
 	}
 	dest = cache[newVal]
 	return
-}
-
-func addRemoved(dest, removed *Node) {
-	tmp := dest.Next
-	dest.Next = removed
-	removed.Next.Next.Next = tmp
 }
 
 func buildCache(head *Node) map[int]*Node {
