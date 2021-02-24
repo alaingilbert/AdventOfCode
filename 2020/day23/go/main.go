@@ -93,7 +93,7 @@ func findDestinationUsingCache(currNode, removed *Node, cache map[int]*Node) (de
 	for {
 		newVal--
 		if newVal == 0 {
-			newVal = 1000000
+			newVal = len(cache)
 		}
 		if !isRemoved(removed, newVal) {
 			break
@@ -109,21 +109,6 @@ func addRemoved(dest, removed *Node) {
 	removed.Next.Next.Next = tmp
 }
 
-func part1() {
-	input := "853192647"
-	currNode := createList(input)
-	for i := 0; i < 100; i++ {
-		removed := removeThree(currNode)
-		destNode := findDestination(currNode, removed)
-		addRemoved(destNode, removed)
-		currNode = currNode.Next
-	}
-	for currNode.Val != 1 {
-		currNode = currNode.Next
-	}
-	printList(currNode)
-}
-
 func buildCache(head *Node) map[int]*Node {
 	out := make(map[int]*Node)
 	tmp := head
@@ -137,20 +122,33 @@ func buildCache(head *Node) map[int]*Node {
 	return out
 }
 
-func part2() {
-	input := "853192647"
-	head := createList(input)
-	extendList(head) // extend the list to 1M
-
-	cache := buildCache(head)
-
-	currNode := head
-	for i := 0; i < 10000000; i++ {
+func mixCups(currNode *Node, nbMoves int, cache map[int]*Node) {
+	for i := 0; i < nbMoves; i++ {
 		removed := removeThree(currNode)
 		destNode := findDestinationUsingCache(currNode, removed, cache)
 		addRemoved(destNode, removed)
 		currNode = currNode.Next
 	}
+}
+
+func part1() {
+	input := "853192647"
+	currNode := createList(input)
+	cache := buildCache(currNode)
+	nbMoves := 100
+	mixCups(currNode, nbMoves, cache)
+	// Find node with label 1
+	currNode = cache[1]
+	printList(currNode)
+}
+
+func part2() {
+	input := "853192647"
+	currNode := createList(input)
+	extendList(currNode) // extend the list to 1M
+	cache := buildCache(currNode)
+	nbMoves := 10000000
+	mixCups(currNode, nbMoves, cache)
 	// Find node with label 1
 	currNode = cache[1]
 	// Multiply next two nodes
