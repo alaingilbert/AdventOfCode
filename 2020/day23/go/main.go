@@ -145,9 +145,7 @@ func part2() {
 		currNode = currNode.Next
 	}
 	// Find node with label 1
-	for currNode.Val != 1 {
-		currNode = currNode.Next
-	}
+	currNode = cache[1]
 	// Multiply next two nodes
 	fmt.Println(currNode.Next.Val * currNode.Next.Next.Val)
 }
