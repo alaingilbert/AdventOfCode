@@ -29,14 +29,14 @@ func createList(input string) *Node {
 }
 
 func extendList(head *Node) {
-	newNode := &Node{Val: 10}
-	newHead := newNode
+	newHead := &Node{Val: 10}
+	curr := newHead
 	for i := 11; i <= 1_000_000; i++ {
-		newNode.Next = &Node{Val: i}
-		newNode = newNode.Next
+		curr.Next = &Node{Val: i}
+		curr = curr.Next
 	}
 	head.Next.Next.Next.Next.Next.Next.Next.Next.Next = newHead
-	newNode.Next = head
+	curr.Next = head
 }
 
 func printList(n *Node) {
