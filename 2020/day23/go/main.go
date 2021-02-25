@@ -20,25 +20,23 @@ func createList(input string) *Node {
 	first, rest := input[0], input[1:]
 	head := &Node{Val: char2Int(first)}
 	curr := head
-	var newNode *Node
 	for i := range rest {
-		newNode = &Node{Val: char2Int(rest[i])}
-		curr.Next = newNode
-		curr = newNode
+		curr.Next = &Node{Val: char2Int(rest[i])}
+		curr = curr.Next
 	}
-	newNode.Next = head
+	curr.Next = head
 	return head
 }
 
 func extendList(head *Node) {
-	newList := &Node{Val: 10}
-	newHead := newList
+	newNode := &Node{Val: 10}
+	newHead := newNode
 	for i := 11; i <= 1_000_000; i++ {
-		newList.Next = &Node{Val: i}
-		newList = newList.Next
+		newNode.Next = &Node{Val: i}
+		newNode = newNode.Next
 	}
 	head.Next.Next.Next.Next.Next.Next.Next.Next.Next = newHead
-	newList.Next = head
+	newNode.Next = head
 }
 
 func printList(n *Node) {
