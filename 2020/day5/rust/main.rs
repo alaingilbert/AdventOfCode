@@ -29,6 +29,7 @@ fn part2() {
     let file = File::open("./input").unwrap();
     let reader = BufReader::new(file);
     let mut cache = HashSet::new();
+    cache.
     for line in reader.lines() {
         let seat_id = seat_id_by_boarding_pass(line.unwrap().as_str());
         cache.insert(seat_id);
