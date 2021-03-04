@@ -3,12 +3,9 @@ package main
 import (
 	"fmt"
 	"math"
-	"sort"
 	"strconv"
 	"strings"
 )
-
-var departureTime int64 = 1004098
 
 var busesStr = "23,x,x,x,x,x,x,x,x,x,x,x,x,41,x,x,x,x,x,x,x,x,x,509,x,x,x,x,x,x,x,x,x,x,x,x,13,17,x,x,x,x,x,x,x,x,x,x,x,x,x,x,29,x,401,x,x,x,x,x,37,x,x,x,x,x,x,x,x,x,x,x,x,19"
 
@@ -24,7 +21,7 @@ type Bus struct {
 	Offset int64
 }
 
-func getSortedBuses() (out []Bus) {
+func getBuses() (out []Bus) {
 	buses := strings.Split(busesStr, ",")
 	for idx, busStr := range buses {
 		if busStr == "x" {
@@ -32,22 +29,21 @@ func getSortedBuses() (out []Bus) {
 		}
 		out = append(out, Bus{BusID: doParseI64(busStr), Offset: int64(idx)})
 	}
-	// Sort buses by bus ID desc
-	sort.Slice(out, func(i, j int) bool { return out[i].BusID > out[j].BusID })
 	return
 }
 
-func getBusNextDepartureTime(busID int64) (nextDepartureTime int64) {
+func getBusNextDepartureTime(departureTime, busID int64) (nextDepartureTime int64) {
 	mul := int64(math.Ceil(float64(departureTime) / float64(busID)))
 	return busID * mul
 }
 
 func part1() {
-	buses := getSortedBuses()
-	nextDepartureTime := getBusNextDepartureTime(buses[0].BusID)
+	departureTime := int64(1004098)
+	buses := getBuses()
+	nextDepartureTime := getBusNextDepartureTime(departureTime, buses[0].BusID)
 	minBusID := buses[0].BusID
 	for _, bus := range buses {
-		busNextDepartureTime := getBusNextDepartureTime(bus.BusID)
+		busNextDepartureTime := getBusNextDepartureTime(departureTime, bus.BusID)
 		if busNextDepartureTime < nextDepartureTime {
 			nextDepartureTime = busNextDepartureTime
 			minBusID = bus.BusID
@@ -57,46 +53,34 @@ func part1() {
 	fmt.Println(minBusID * waitTime)
 }
 
-/**
-7,0   13,1   59,4   31,6   19,7
-7      14     63     37     26
+func solve(bus1, bus2 Bus) (out int64) {
+	a := bus2.Offset - bus1.Offset
+	for {
+		if a%bus2.BusID == 0 {
+			return out
+		}
+		a += bus1.BusID
+		out++
+	}
+}
 
-1068781 / 7
-1068782 / 13
-1068783
-1068784
-1068785 / 59
-1068786
-1068787 / 31
-1068788 / 19
-
-
-
-*/
+func mergeBuses(bus1, bus2 Bus) Bus {
+	x1 := solve(bus1, bus2)
+	return Bus{Offset: bus1.Offset - (bus1.BusID * x1), BusID: bus1.BusID * bus2.BusID}
+}
 
 func part2() {
-	buses := getSortedBuses()
-	maxBus := buses[0]
-	fmt.Println(maxBus)
-
-	var departureTime int64 = 100000000000016
+	buses := getBuses()
+	var res, bus1, bus2 Bus
 	for {
-		departureTime += maxBus.BusID
-		if departureTime%100000000 == 0 {
-			fmt.Println("progress:", departureTime)
-		}
-		found := true
-		for _, bus := range buses {
-			if ((departureTime-maxBus.Offset)+bus.Offset)%bus.BusID != 0 {
-				found = false
-				break
-			}
-		}
-		if found {
-			fmt.Println("found", departureTime-maxBus.Offset)
+		bus1, bus2, buses = buses[0], buses[1], buses[2:]
+		res = mergeBuses(bus1, bus2)
+		buses = append(buses, res)
+		if len(buses) == 1 {
 			break
 		}
 	}
+	fmt.Println(-res.Offset)
 }
 
 func main() {
